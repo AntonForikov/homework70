@@ -20,7 +20,7 @@ const ContactItem: React.FC<Props> = ({name, image= '', onClick}) => {
           ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'
           : image
         }
-           alt={name}
+        alt={name}
         width={100}
       />
       <h3 className='ms-3'>{name}</h3>
