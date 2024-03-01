@@ -15,6 +15,7 @@ const ContactItem: React.FC<Props> = ({name, image= '', onClick}) => {
       onClick={onClick}
     >
       <img
+        className='rounded'
         src={image === ''
           ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'
           : image
