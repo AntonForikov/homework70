@@ -4,12 +4,11 @@ import Modal from 'react-bootstrap/Modal';
 import {Link} from 'react-router-dom';
 
 interface Props {
-  id: string
+  id?: string
   name: string
   image?: string
   email: string,
   phone: string
-  // onClick: React.MouseEventHandler
 }
 
 const ContactItem: React.FC<Props> = ({name, image= '', email, phone, id}) => {
