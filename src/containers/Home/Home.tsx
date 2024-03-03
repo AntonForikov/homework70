@@ -16,12 +16,14 @@ const Home = () => {
 
   return (
     <main>
-      {isLoading ? <div className='d-flex justify-content-center mt-3'><Spinner /></div> : contactList.map((contact) => {
+      {isLoading ? <div className='d-flex justify-content-center mt-3'><Spinner/></div> : contactList.map((contact) => {
         return <ContactItem
           key={contact.id}
           id={contact.id}
           name={contact.name}
           image={contact.photo}
+          phone={contact.phone}
+          email={contact.email}
         />;
       })}
     </main>
