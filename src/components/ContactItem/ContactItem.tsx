@@ -4,15 +4,15 @@ interface Props {
   id: string
   name: string
   image?: string
-  onClick: React.MouseEventHandler
+  // onClick: React.MouseEventHandler
 }
 
-const ContactItem: React.FC<Props> = ({name, image= '', onClick}) => {
+const ContactItem: React.FC<Props> = ({name, image= ''}) => {
   return (
     <div
       className='d-flex align-items-center border rounded m-3'
       style={{cursor: 'pointer'}}
-      onClick={onClick}
+      // onClick={onClick}
     >
       <img
         className='rounded'

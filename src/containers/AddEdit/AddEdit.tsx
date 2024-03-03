@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {useAppDispatch} from '../../app/hooks';
+import {addNewContact} from '../../store/contactsThunk';
 
 interface Props {
   edit?: boolean
@@ -12,9 +14,9 @@ const initialInputs = {
     photo: ''
   };
 const AddEdit: React.FC<Props> = ({edit = false}) => {
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState(initialInputs);
-  // const input = useAppSelector(selectUserInputs);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   console.log(edit);
 
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,24 +27,29 @@ const AddEdit: React.FC<Props> = ({edit = false}) => {
         [name]: value
       };
     });
-    console.log(inputs);
+  };
+
+  const onFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await dispatch(addNewContact(inputs));
+    navigate('/');
   };
 
   return (
     <main className='px-3'>
       <h1>Add new contact</h1>
-      <form>
+      <form onSubmit={onFormSubmit}>
         <div className="d-flex w-25 align-items-center justify-content-between my-2">
           <label htmlFor="name">Name:</label>
-          <input className="form-control w-75" type="text" name="name" id="name" onChange={changeInput} value={inputs.name} />
+          <input className="form-control w-75" type="text" name="name" id="name" onChange={changeInput} value={inputs.name} required/>
         </div>
         <div className="d-flex w-25 align-items-center justify-content-between my-2">
           <label htmlFor="phone">Phone:</label>
-          <input className="form-control w-75" type="text" name="phone" id="phone" onChange={changeInput} value={inputs.phone}/>
+          <input className="form-control w-75" type="text" name="phone" id="phone" onChange={changeInput} value={inputs.phone} required/>
         </div>
         <div className="d-flex w-25 align-items-center justify-content-between my-2">
           <label htmlFor="email">Email:</label>
-          <input className="form-control w-75" type="text" name="email" id="email" onChange={changeInput} value={inputs.email}/>
+          <input className="form-control w-75" type="email" name="email" id="email" onChange={changeInput} value={inputs.email} required/>
         </div>
         <div className="d-flex w-25 align-items-center justify-content-between my-2">
           <label htmlFor="photo">Photo:</label>

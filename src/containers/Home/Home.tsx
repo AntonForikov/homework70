@@ -1,26 +1,29 @@
-import {useAppDispatch} from '../../app/hooks';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {getContactsList} from '../../store/contactsThunk';
 import ContactItem from '../../components/ContactItem/ContactItem';
+import {selectContactsList, selectLoading} from '../../store/contactsSlice';
+import {useEffect} from 'react';
+import Spinner from '../../components/Spinner/Spinner';
 
 const Home = () => {
+  const contactList = useAppSelector(selectContactsList);
+  const isLoading = useAppSelector(selectLoading);
   const dispatch = useAppDispatch();
 
-  const test = () => {
-    dispatch(getContactsList('345'));
-  };
+  useEffect(() => {
+    dispatch(getContactsList());
+  }, [dispatch]);
+
   return (
     <main>
-      <ContactItem
-        image={'https://m.media-amazon.com/images/M/MV5BNTczMzk1MjU1MV5BMl5BanBnXkFtZTcwNDk2MzAyMg@@._V1_FMjpg_UX1000_.jpg'}
-        id='5'
-        name='test'
-        onClick={test}
-      />
-      <ContactItem
-        id='5'
-        name='test'
-        onClick={test}
-      />
+      {isLoading ? <div className='d-flex justify-content-center mt-3'><Spinner /></div> : contactList.map((contact) => {
+        return <ContactItem
+          key={contact.id}
+          id={contact.id}
+          name={contact.name}
+          image={contact.photo}
+        />;
+      })}
     </main>
   );
 };

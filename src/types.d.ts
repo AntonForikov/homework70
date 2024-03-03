@@ -4,3 +4,11 @@ export interface ContactToSend {
   email: string,
   photo: string
 }
+
+export interface ContactsFromApi {
+  [id: string]: ContactToSend
+}
+
+export interface ContactsWithId extends ContactToSend {
+  id: string
+}

@@ -1,14 +1,25 @@
-import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
+import {createAsyncThunk} from '@reduxjs/toolkit';
+import {ContactsFromApi, ContactToSend} from '../types';
+import axiosApi from '../axiosApi';
 
-export const changeInputField = createAction(
-  'contact/changeField',
-  (value: string) => {
-    return {payload: value};
-  });
+export const addNewContact = createAsyncThunk<void, ContactToSend> (
+  'contacts/add',
+  async (contact) => {
+    await axiosApi.post('/contacts.json', contact);
+  }
+);
 
 export const getContactsList = createAsyncThunk (
   'contacts/list',
-  async (id: string) => {
-    console.log('getContactsList thunk with id:', id);
+  async () => {
+    const {data} = await axiosApi.get<ContactsFromApi | null>('/contacts.json');
+    if (data) {
+      return Object.keys(data).map(id => ({
+        id: id,
+        ...data[id],
+      }));
+    } else {
+      return [];
+    }
   }
 );

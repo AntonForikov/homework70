@@ -1,25 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../app/store';
-import {ContactToSend} from '../types';
-import {changeInputField} from './contactsThunk';
+import {addNewContact, getContactsList} from './contactsThunk';
+import {ContactsWithId} from '../types';
 
 interface ContactsState {
-  contactsList: [],
+  contactsList: ContactsWithId[],
   loading: boolean,
-  userInputs: ContactToSend
-  username: string
+
 }
 
 const initialState: ContactsState = {
   contactsList: [],
   loading: false,
-  userInputs: {
-    name: '',
-    phone: '',
-    email: '',
-    photo: ''
-  },
-  username: ''
 };
 
 const contactSlice = createSlice({
@@ -27,15 +19,25 @@ const contactSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-      builder.addCase(changeInputField, (state, action) => {
-        state.userInputs.name = action.payload;
-        console.log(state.userInputs);
+      builder.addCase(addNewContact.pending, (state) => {
+        state.loading = true;
+      }).addCase(addNewContact.fulfilled, (state) => {
+        state.loading = false;
+      }).addCase(addNewContact.rejected, (state) => {
+        state.loading = false;
+      });
+
+      builder.addCase(getContactsList.pending, (state) => {
+        state.loading = true;
+      }).addCase(getContactsList.fulfilled, (state, {payload: contactList}) => {
+        state.loading = false;
+        state.contactsList = contactList;
+      }).addCase(getContactsList.rejected, (state) => {
+        state.loading = false;
       });
     }
 });
 
 export const contactsReducer = contactSlice.reducer;
-// export const {changeInputField} = contactSlice.actions;
 export const selectContactsList = (state: RootState) => state.contacts.contactsList;
 export const selectLoading = (state: RootState) => state.contacts.loading;
-export const selectUserInputs = (state: RootState) => state.contacts.userInputs;
