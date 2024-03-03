@@ -32,7 +32,7 @@ export const updateContact = createAsyncThunk<void, ContactWithId> (
       email: contact.email,
       phone: contact.phone,
       photo: contact.photo
-    }
-    await axiosApi.put(`/contacts/${contact.id}.json`, contactToSend)
+    };
+    await axiosApi.put(`/contacts/${contact.id}.json`, contactToSend);
   }
-)
+);

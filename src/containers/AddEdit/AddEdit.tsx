@@ -40,7 +40,7 @@ const AddEdit: React.FC<Props> = ({edit = false}) => {
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (edit) {
-      await dispatch(updateContact(inputs))
+      await dispatch(updateContact(inputs));
     } else {
       await dispatch(addNewContact(inputs));
     }
