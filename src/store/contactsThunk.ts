@@ -1,5 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {ContactsFromApi, ContactToSend} from '../types';
+import {ContactsFromApi, ContactToSend, ContactWithId} from '../types';
 import axiosApi from '../axiosApi';
 
 export const addNewContact = createAsyncThunk<void, ContactToSend> (
@@ -23,3 +23,16 @@ export const getContactsList = createAsyncThunk (
     }
   }
 );
+
+export const updateContact = createAsyncThunk<void, ContactWithId> (
+  'contacts/update',
+  async (contact) => {
+    const contactToSend: ContactToSend = {
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
+      photo: contact.photo
+    }
+    await axiosApi.put(`/contacts/${contact.id}.json`, contactToSend)
+  }
+)

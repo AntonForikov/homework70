@@ -9,6 +9,6 @@ export interface ContactsFromApi {
   [id: string]: ContactToSend
 }
 
-export interface ContactsWithId extends ContactToSend {
-  id: string
+export interface ContactWithId extends ContactToSend {
+  id?: string
 }

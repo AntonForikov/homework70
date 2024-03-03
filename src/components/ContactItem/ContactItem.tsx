@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import {Link} from 'react-router-dom';
 
 interface Props {
   id: string
@@ -55,9 +56,9 @@ const ContactItem: React.FC<Props> = ({name, image= '', email, phone, id}) => {
             <Button variant="danger" onClick={handleClose}>
               Delete
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Link className="btn btn-primary" to={`/edit-contact/${id}`} >
               Edit
-            </Button>
+            </Link>
           </Modal.Footer>
         </Modal>
       }

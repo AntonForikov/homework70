@@ -1,10 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../app/store';
-import {addNewContact, getContactsList} from './contactsThunk';
-import {ContactsWithId} from '../types';
+import {addNewContact, getContactsList, updateContact} from './contactsThunk';
+import {ContactWithId} from '../types';
 
 interface ContactsState {
-  contactsList: ContactsWithId[],
+  contactsList: ContactWithId[],
   loading: boolean,
 
 }
@@ -35,6 +35,8 @@ const contactSlice = createSlice({
       }).addCase(getContactsList.rejected, (state) => {
         state.loading = false;
       });
+
+      // builder.addCase(updateContact.fulfilled, () => {})
     }
 });
 

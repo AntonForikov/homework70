@@ -1,23 +1,31 @@
 import React, {useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {useAppDispatch} from '../../app/hooks';
-import {addNewContact} from '../../store/contactsThunk';
+import {Link, useNavigate, useParams} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {addNewContact, updateContact} from '../../store/contactsThunk';
+import {selectContactsList} from '../../store/contactsSlice';
+import {ContactToSend} from '../../types';
 
 interface Props {
   edit?: boolean
 }
 
-const initialInputs = {
+const initialInputs: ContactToSend = {
     name: '',
     phone: '',
     email: '',
     photo: ''
   };
 const AddEdit: React.FC<Props> = ({edit = false}) => {
-  const navigate = useNavigate();
-  const [inputs, setInputs] = useState(initialInputs);
+  const {id} = useParams();
+  const contactList = useAppSelector(selectContactsList);
   const dispatch = useAppDispatch();
-  console.log(edit);
+  const navigate = useNavigate();
+
+  const [inputs, setInputs] = useState(edit
+    ? contactList.filter(contact => contact.id === id)[0]
+    : initialInputs
+  );
+
 
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
@@ -31,13 +39,17 @@ const AddEdit: React.FC<Props> = ({edit = false}) => {
 
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await dispatch(addNewContact(inputs));
+    if (edit) {
+      await dispatch(updateContact(inputs))
+    } else {
+      await dispatch(addNewContact(inputs));
+    }
     navigate('/');
   };
 
   return (
     <main className='px-3'>
-      <h1>Add new contact</h1>
+      <h1>{edit ? 'Edit contact' : 'Add new contact'}</h1>
       <form onSubmit={onFormSubmit}>
         <div className="d-flex w-25 align-items-center justify-content-between my-2">
           <label htmlFor="name">Name:</label>
@@ -45,7 +57,7 @@ const AddEdit: React.FC<Props> = ({edit = false}) => {
         </div>
         <div className="d-flex w-25 align-items-center justify-content-between my-2">
           <label htmlFor="phone">Phone:</label>
-          <input className="form-control w-75" type="text" name="phone" id="phone" onChange={changeInput} value={inputs.phone} required/>
+          <input className="form-control w-75" type="tel" name="phone" id="phone" onChange={changeInput} value={inputs.phone} required/>
         </div>
         <div className="d-flex w-25 align-items-center justify-content-between my-2">
           <label htmlFor="email">Email:</label>
