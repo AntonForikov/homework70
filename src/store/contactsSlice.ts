@@ -7,13 +7,14 @@ interface ContactsState {
   contactsList: ContactWithId[],
   currentContact: ContactWithId | null,
   loading: boolean,
-
+  deleteLoading: boolean
 }
 
 const initialState: ContactsState = {
   contactsList: [],
   currentContact: null,
   loading: false,
+  deleteLoading: false
 };
 
 const contactSlice = createSlice({

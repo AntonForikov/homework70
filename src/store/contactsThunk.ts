@@ -29,7 +29,7 @@ export const getContactsById = createAsyncThunk (
   async (contactId: string | undefined) => {
     const {data} = await axiosApi.get<ContactWithId | null>(`/contacts/${contactId}.json`);
     if (data) {
-      return data;
+      return {...data, id: contactId};
     } else {
       return null;
     }
@@ -46,5 +46,13 @@ export const updateContact = createAsyncThunk<void, ContactWithId> (
       photo: contact.photo
     };
     await axiosApi.put(`/contacts/${contact.id}.json`, contactToSend);
+  }
+);
+
+export const deleteContact = createAsyncThunk<void, string> (
+  'contacts/delete',
+  async (id) => {
+    const confirmation = confirm('Are you sure?');
+    if (confirmation) await axiosApi.delete(`/contacts/${id}.json`);
   }
 );

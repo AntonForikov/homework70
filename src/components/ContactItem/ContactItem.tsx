@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Link} from 'react-router-dom';
+import {useAppDispatch} from '../../app/hooks';
+import {deleteContact, getContactsList} from '../../store/contactsThunk';
 
 interface Props {
   id?: string
@@ -12,9 +14,16 @@ interface Props {
 }
 
 const ContactItem: React.FC<Props> = ({name, image= '', email, phone, id}) => {
+  const dispatch = useAppDispatch();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const onDelete = () => {
+    if (id) dispatch(deleteContact(id));
+    handleClose();
+    dispatch(getContactsList());
+  };
 
   return (
     <>
@@ -52,7 +61,7 @@ const ContactItem: React.FC<Props> = ({name, image= '', email, phone, id}) => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={handleClose}>
+            <Button variant="danger" onClick={onDelete}>
               Delete
             </Button>
             <Link className="btn btn-primary" to={`/edit-contact/${id}`} >
