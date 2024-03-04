@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {addNewContact, updateContact} from '../../store/contactsThunk';
-import {selectContactsList} from '../../store/contactsSlice';
+import {addNewContact, getContactsById, updateContact} from '../../store/contactsThunk';
+import {selectCurrentContact} from '../../store/contactsSlice';
 import {ContactToSend} from '../../types';
 
 interface Props {
@@ -17,15 +17,23 @@ const initialInputs: ContactToSend = {
   };
 const AddEdit: React.FC<Props> = ({edit = false}) => {
   const {id} = useParams();
-  const contactList = useAppSelector(selectContactsList);
+  const currentContact = useAppSelector(selectCurrentContact);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [inputs, setInputs] = useState(edit
-    ? contactList.filter(contact => contact.id === id)[0]
-    : initialInputs
-  );
+  const [inputs, setInputs] = useState(initialInputs);
 
+  useEffect(() => {
+    dispatch(getContactsById(id));
+  }, [id, dispatch]);
+
+  useEffect(() => {
+    if (currentContact) {
+      setInputs(currentContact);
+    } else {
+      setInputs(initialInputs);
+    }
+  }, [currentContact]);
 
   const changeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;

@@ -24,6 +24,18 @@ export const getContactsList = createAsyncThunk (
   }
 );
 
+export const getContactsById = createAsyncThunk (
+  'contacts/getById',
+  async (contactId: string | undefined) => {
+    const {data} = await axiosApi.get<ContactWithId | null>(`/contacts/${contactId}.json`);
+    if (data) {
+      return data;
+    } else {
+      return null;
+    }
+  }
+);
+
 export const updateContact = createAsyncThunk<void, ContactWithId> (
   'contacts/update',
   async (contact) => {
