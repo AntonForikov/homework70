@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Link} from 'react-router-dom';
-import {useAppDispatch} from '../../app/hooks';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {deleteContact, getContactsList} from '../../store/contactsThunk';
+import {selectDeleteLoading} from '../../store/contactsSlice';
 
 interface Props {
   id?: string
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const ContactItem: React.FC<Props> = ({name, image= '', email, phone, id}) => {
+  const deleteButtonDisabler = useAppSelector(selectDeleteLoading);
   const dispatch = useAppDispatch();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -61,7 +63,7 @@ const ContactItem: React.FC<Props> = ({name, image= '', email, phone, id}) => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={onDelete}>
+            <Button variant="danger" onClick={onDelete} disabled={deleteButtonDisabler}>
               Delete
             </Button>
             <Link className="btn btn-primary" to={`/edit-contact/${id}`} >

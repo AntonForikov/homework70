@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {addNewContact, getContactsById, updateContact} from '../../store/contactsThunk';
-import {selectCurrentContact} from '../../store/contactsSlice';
+import {selectAddUpdateDisable, selectCurrentContact} from '../../store/contactsSlice';
 import {ContactToSend} from '../../types';
 
 interface Props {
@@ -18,6 +18,7 @@ const initialInputs: ContactToSend = {
 const AddEdit: React.FC<Props> = ({edit = false}) => {
   const {id} = useParams();
   const currentContact = useAppSelector(selectCurrentContact);
+  const buttonDisabler = useAppSelector(selectAddUpdateDisable);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -80,9 +81,10 @@ const AddEdit: React.FC<Props> = ({edit = false}) => {
           <img
             src={inputs.photo}
             width={100}
+            alt={inputs.name}
           />
         </div>
-        <button className='btn btn-primary me-3' type='submit'>Save</button>
+        <button className='btn btn-primary me-3' type='submit' disabled={buttonDisabler}>Save</button>
         <Link to='/' className='btn btn-danger'>Back to contacts</Link>
       </form>
     </main>
