@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Link} from 'react-router-dom';
-import {useAppDispatch} from '../../app/hooks';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {deleteContact, getContactsList} from '../../store/contactsThunk';
+import {selectDeleteLoading} from '../../store/contactsSlice';
 
 interface Props {
   id?: string
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const ContactItem: React.FC<Props> = ({name, image= '', email, phone, id}) => {
+  const deleteButtonDisabler = useAppSelector(selectDeleteLoading);
   const dispatch = useAppDispatch();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -52,7 +54,11 @@ const ContactItem: React.FC<Props> = ({name, image= '', email, phone, id}) => {
           <Modal.Body>
             <div className='d-flex'>
               <div>
-                <img src={image} alt={name} width={100}/>
+                <img
+                  src={image === ''
+                    ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png'
+                    : image}
+                  alt={name} width={100}/>
               </div>
               <div className='ms-3'>
                 <h5>Email: {email}</h5>
@@ -61,7 +67,7 @@ const ContactItem: React.FC<Props> = ({name, image= '', email, phone, id}) => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={onDelete}>
+            <Button variant="danger" onClick={onDelete} disabled={deleteButtonDisabler}>
               Delete
             </Button>
             <Link className="btn btn-primary" to={`/edit-contact/${id}`} >
